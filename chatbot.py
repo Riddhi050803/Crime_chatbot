@@ -27,7 +27,7 @@ def extract_keywords(text):
     keywords = [w for w in words if w not in stopwords]
     return [" ".join(keywords)]  # Return as a single string for now
 
-def chatbot(query, top_k=3, threshold=0.3):
+def chatbot(query, top_k=3, threshold=0.4):
     # Extract keywords or key phrases from the query
     phrases = extract_keywords(query)
 
