@@ -1,0 +1,106 @@
+
+
+# ⚖️ Crime Chatbot (IPC ↔ BNS Mapping)
+
+A conversational chatbot that helps map a user’s complaint to relevant **Indian Penal Code (IPC)** and **Bhartiya Nyay Sanhita (BNS)**, along with explanations and punishments.
+
+It leverages **semantic search** using [Sentence Transformers](https://www.sbert.net/) to match natural language queries with a pre-defined dataset of crime examples.
+
+---
+
+## Features
+
+* Map free-text complaints to relevant IPC and BNS sections.
+* Provide explanations in simple language.
+* Show associated punishments for each matched section.
+* Rank matches based on semantic similarity.
+* Threshold-based filtering to avoid irrelevant results.
+
+---
+
+## Tech Stack
+
+* **Python 3.9+**
+* **Pandas** – for CSV data handling.
+* **Sentence Transformers (`all-mpnet-base-v2`)** – for semantic embeddings.
+* **PyTorch** – backend for embeddings and similarity computations.
+* **Regex** – for basic keyword extraction.
+
+---
+
+## Installation
+
+1. Clone the repository:
+
+2. Create a virtual environment (recommended):
+
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
+
+3. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Ensure you have your dataset in `data/crime_dataset.csv` with the following columns:
+
+* `Example Complaint (Query)`
+* `IPC Section(s)`
+* `BNS Section(s)`
+* `Explanation (Plain)`
+* `Punishment`
+
+---
+
+## Usage
+
+Run the chatbot from the console:
+
+```bash
+python chatbot.py
+```
+
+Example interaction:
+
+```
+⚖️ Crime Chatbot (IPC ↔ BNS Mapping)
+Type 'exit' to quit.
+
+Enter your complaint: I was travelling to my office and someone stole my wallet
+
+📌 Possible Matched Sections:
+1. (Similarity: 0.59)
+   IPC: IPC 378
+   BNS: BNS 303
+   Explanation: Theft of movable property
+   Punishment: Jail up to 3 years + fine
+```
+
+Type `exit` to close the chatbot.
+
+---
+
+## How It Works
+
+1. **Load Dataset:** CSV containing sample complaints and their IPC/BNS mapping.
+2. **Embed Complaints:** Encode all example complaints using `SentenceTransformer`.
+3. **Process Query:**
+
+   * Extract keywords from user input (basic stopword removal).
+   * Encode the query using the same model.
+4. **Compute Similarity:** Compare query embedding with all complaint embeddings.
+5. **Return Matches:**
+
+   * Top `k` results above a similarity threshold.
+   * Filter duplicates by IPC + BNS combination.
+
+---
+
+## Configuration
+
+* **`top_k`** – Number of top matches to display (default: 3).
+* **`threshold`** – Minimum similarity score to consider a match (default: 0.3).

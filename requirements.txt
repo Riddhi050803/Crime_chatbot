@@ -1,0 +1,4 @@
+pandas>=1.5.0
+torch>=2.1.0
+sentence-transformers>=2.2.2
+regex>=2023.8.8
